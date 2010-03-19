@@ -1,0 +1,686 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+          "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY app "freedots">
+<!ENTITY App "FreeDots">
+<!ENTITY bmn "braille music notation">
+<!ENTITY Bmn "Braille music notation">
+<!ENTITY nimobmn "new international manual of &bmn;">
+<!ENTITY omr "optical music recognition">
+<!ENTITY XML "<acronym>XML</acronym>">
+<!ENTITY email "mlang@delysid.org">
+
+<!ENTITY % unicode-braille
+    PUBLIC "-//delYsid//ENTITIES Unicode Braille v1.0//EN"
+    "unicode-braille-v10.ent">
+%unicode-braille;
+]>
+<book>
+  <bookinfo>
+    <title>&App; User Guide</title>
+
+    <productname>&App;</productname>
+    <author>
+      <firstname>Mario</firstname> <surname>Lang</surname>
+      <affiliation>
+	<address><email>&email;</email></address>
+      </affiliation>
+    </author>
+
+    <copyright>
+      <year>2008</year><year>2009</year><year>2010</year>
+      <holder role="mailto:&email;">Mario Lang</holder>
+    </copyright>
+
+    <legalnotice>
+      <para>
+Permission to use, copy, modify and distribute this document
+for any purpose and without fee is hereby granted in perpetuity,
+provided that the above copyright notice and this paragraph appear
+in all copies.
+      </para>
+    </legalnotice>
+
+    <releaseinfo>$Id$</releaseinfo>
+
+    <abstract>
+      <para>
+<application>&App;</application> provides a way for blind individuals to access
+scanned sheet music in a convenient format (&bmn;).
+      </para>
+      <para>
+This book serves as an introduction to &bmn; for those readers that are not
+familiar with it yet.  It is also the User's Manual for
+<application>&App;</application>.
+      </para>
+    </abstract>
+  </bookinfo>
+
+  <part><title>Introduction to &bmn;</title>
+    <partintro>
+      <para>
+&Bmn; is an internationally accepted standard for notating music
+for visually impaired musicians in a tactile form.
+&Bmn; was originally developed by Louis Braille.
+      </para>
+      <para>
+&Bmn; uses the same six-position Braille cell as literary braille.
+However braille music assigns an entirely separate meaning to each braille
+symbol or group of symbols, different from literary braille, and has its own
+syntax and abbreviations.
+      </para>
+      <para>
+Since <application>&App;</application> is mostly useless to a user who can not
+read &bmn;, the first part of this book is dedicated to teaching the very
+basics of &bmn;.  If you are already familiar with the international &bmn;
+standard, you can safely skip over this section.
+      </para>
+      <para>
+Also, german speaking readers might like to refer to the
+<ulink url="http://www.braille.ch/musik/">Neues internationales Handbuch der Braillenotenschrift</ulink>
+(new international handbook of braille music notation) available from the
+internet.
+      </para>
+    </partintro>
+
+    <chapter><title>Simple monophonic melodies</title>
+      <sect1>
+	<title>Notes and rests</title>
+	<para>
+The pitch of the notes are indicated by dots 1, 2, 4, and 5.  The absence or
+presence of dots 3 and/or 6 determines the note rhythmic values.  Each note or
+rest has two rhythmic value possibilities.
+	</para>
+	<table>
+	  <title>Note and rest symbols</title>
+	  <tgroup cols='8'>
+	    <thead>
+	      <row>
+		<entry>Note value</entry>
+		<entry>C</entry>
+		<entry>D</entry>
+		<entry>E</entry>
+		<entry>F</entry>
+		<entry>G</entry>
+		<entry>A</entry>
+		<entry>B</entry>
+		<entry>rest</entry>
+	      </row>
+	    </thead>
+	    <tbody>
+	      <row>
+		<entry>wholes or 16ths</entry>
+		<entry><symbol role="symbolfont">&brl13456;</symbol></entry>
+		<entry><symbol role="symbolfont">&brl1356;</symbol></entry>
+		<entry><symbol role="symbolfont">&brl12346;</symbol></entry>
+		<entry><symbol role="symbolfont">&brl123456;</symbol></entry>
+		<entry><symbol role="symbolfont">&brl12356;</symbol></entry>
+		<entry><symbol role="symbolfont">&brl2346;</symbol></entry>
+		<entry><symbol role="symbolfont">&brl23456;</symbol></entry>
+		<entry><symbol role="symbolfont">&brl134;</symbol></entry>
+	      </row>
+	      <row>
+		<entry>halves or 32nds</entry>
+		<entry><symbol role="symbolfont">&brl1345;</symbol></entry>
+		<entry><symbol role="symbolfont">&brl135;</symbol></entry>
+		<entry><symbol role="symbolfont">&brl1234;</symbol></entry>
+		<entry><symbol role="symbolfont">&brl12345;</symbol></entry>
+		<entry><symbol role="symbolfont">&brl1235;</symbol></entry>
+		<entry><symbol role="symbolfont">&brl234;</symbol></entry>
+		<entry><symbol role="symbolfont">&brl2345;</symbol></entry>
+		<entry><symbol role="symbolfont">&brl136;</symbol></entry>
+	      </row>
+	      <row>
+		<entry>quarters or 64ths</entry>
+		<entry><symbol role="symbolfont">&brl1456;</symbol></entry>
+		<entry><symbol role="symbolfont">&brl156;</symbol></entry>
+		<entry><symbol role="symbolfont">&brl1246;</symbol></entry>
+		<entry><symbol role="symbolfont">&brl12456;</symbol></entry>
+		<entry><symbol role="symbolfont">&brl1256;</symbol></entry>
+		<entry><symbol role="symbolfont">&brl246;</symbol></entry>
+		<entry><symbol role="symbolfont">&brl2456;</symbol></entry>
+		<entry><symbol role="symbolfont">&brl1236;</symbol></entry>
+	      </row>
+	      <row>
+		<entry>eighths or 128ths</entry>
+		<entry><symbol role="symbolfont">&brl145;</symbol></entry>
+		<entry><symbol role="symbolfont">&brl15;</symbol></entry>
+		<entry><symbol role="symbolfont">&brl124;</symbol></entry>
+		<entry><symbol role="symbolfont">&brl1245;</symbol></entry>
+		<entry><symbol role="symbolfont">&brl125;</symbol></entry>
+		<entry><symbol role="symbolfont">&brl24;</symbol></entry>
+		<entry><symbol role="symbolfont">&brl245;</symbol></entry>
+		<entry><symbol role="symbolfont">&brl1346;</symbol></entry>
+	      </row>
+	    </tbody>
+	  </tgroup>
+	</table>
+	<para>
+For dotted notes, dot 3 represents each print dot following a note.  It is
+placed immediately after the braille note.  No other sign comes between the
+note and its dot(s).  Dotted rests are treated the same as dotted notes.
+	</para>
+	<example width="40">
+	  <title>Example 1-2 from the &nimobmn;</title>
+	  <literallayout class="Monospaced">
+	    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+			parse="text" href="example1-2.brl" />
+	  </literallayout>
+	  <para>
+	    <ulink url="example1-2.mid">Listen to this example</ulink>
+	  </para>
+	</example>
+      </sect1>
+      <sect1 id="octaveMarks">
+	<title>Octave marks</title>
+	<para>
+Octave marks, rather than clefs on a staff, indicate specific pitch locations
+in braille music.  Octaves are numbered from one to seven, beginning with the
+lowest C on the normal, seven-octave piano.  Each octave begins on C and
+includes all the notes up to, but not including, the next C above.  The fourth
+octave begins on the "middle C" of the piano.
+	</para>
+	<para>
+The octave mark is placed immediately before the note to which it applies with
+no intervening signs.  The following table shows the octave marks from
+1 to 7 placed before quarter-note C.
+	</para>
+	<table>
+	  <title>Octave marks</title>
+	  <tgroup cols='2'>
+	    <thead><row><entry>Example</entry><entry>Octave name</entry></row></thead>
+	    <tbody>
+	      <row>
+		<entry><symbol role="symbolfont">&brl4;&brl1456;</symbol></entry>
+		<entry>contra</entry>
+	      </row>
+	      <row>
+		<entry><symbol role="symbolfont">&brl45;&brl1456;</symbol></entry>
+		<entry>great</entry>
+	      </row>
+	      <row>
+		<entry><symbol role="symbolfont">&brl456;&brl1456;</symbol></entry>
+		<entry>small</entry>
+	      </row>
+	      <row>
+		<entry><symbol role="symbolfont">&brl5;&brl1456;</symbol></entry>
+		<entry>one-lined</entry>
+	      </row>
+	      <row>
+		<entry><symbol role="symbolfont">&brl46;&brl1456;</symbol></entry>
+		<entry>two-lined</entry>
+	      </row>
+	      <row>
+		<entry><symbol role="symbolfont">&brl56;&brl1456;</symbol></entry>
+		<entry>three-lined</entry>
+	      </row>
+	      <row>
+		<entry><symbol role="symbolfont">&brl6;&brl1456;</symbol></entry>
+		<entry>four-lined</entry>
+	      </row>
+	    </tbody>
+	  </tgroup>
+	</table>
+	<para>
+The first note of a piece must be preceded by its octave mark.  For the
+succeeding notes the following rules apply:
+	</para>
+	<orderedlist numeration="loweralpha">
+	  <listitem>
+	    <para>
+if the next note forms an ascending or descending second or third, it does not
+receive an octave mark even if it is in a different octave.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+if it forms an ascending or descending fourth or fifth, it only receives an
+octave mark if it is in a different octave from the preceding note.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+if it forms a sixth or more, it must always have its own octave mark.
+	    </para>
+	  </listitem>
+	</orderedlist>
+	<para>
+These rules are illustrated in the following example from the <quote>Cologne
+Key</quote> of 1888.
+	</para>
+	<example width="40">
+	  <title>Example 1-11 from the &nimobmn;</title>
+	  <literallayout class="Monospaced">
+	    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+			parse="text" href="example1-11.brl"/>
+	  </literallayout>
+	  <para>
+	    <ulink url="example1-11.mid">Listen to this example</ulink>
+	  </para>
+	</example>
+      </sect1>
+    </chapter>
+    <chapter>
+      <title>Accidentals, key and time signatures</title>
+      <sect1>
+	<title>Accidentals</title>
+        <para>
+The following table lists the symbols used to indicate accidentals.
+	</para>
+	<table><title>Accidentals</title>
+	<tgroup cols='2'>
+	  <thead><row><entry>Symbol</entry><entry>Description</entry></row></thead>
+	  <tbody>
+	    <row><entry><symbol role="symbolfont">&brl16;</symbol></entry>
+  	         <entry>natural</entry>
+	    </row>
+	    <row><entry><symbol role="symbolfont">&brl126;</symbol></entry>
+  	         <entry>flat</entry>
+	    </row>
+	    <row><entry><symbol role="symbolfont">&brl146;</symbol></entry>
+  	         <entry>sharp</entry>
+	    </row>
+	  </tbody>
+	</tgroup>
+	</table>
+	<para>
+The sharp, flat and natural signs are placed before the notes,
+intervals or other features to which they belong.  They must not be separated
+from notes by anything other than <link linkend="octaveMarks">octave marks</link>.
+	</para>
+	<para>
+If an accidental appears above or below a note in print, it is preceded by dot 6
+in braille.
+	</para>
+      </sect1>
+      <sect1><title>Key signatures</title>
+        <para>
+Key signatures reflect the number of flats or sharps, not the actual pitches as
+in print.  If there are four or more accidentals in a key signature, the number
+sign (dots 3, 4, 5, 6) is used.
+	</para>
+	<para>
+The next note following a key signature must have an octave mark.
+If it is not followed by a time signature, it must be followed by a space.
+	</para>
+      </sect1>
+      <sect1><title>Time signatures</title>
+      <para>
+When time signatures consist of an upper and a lower number in print, the
+braille uses upper- and lower-cell numbers with a number sign only at the
+beginning of the combination.  An upper-cell number is used for a single-digit
+time signature.  In other types of signatures as well, the print is followed
+closely.
+      </para>
+	<table><title>Time signatures</title>
+	<tgroup cols='2'>
+	  <thead><row><entry>Symbol</entry><entry>Description</entry></row></thead>
+	  <tbody>
+	    <row><entry><symbol role="symbolfont">&brl46;&brl14;</symbol></entry>
+  	         <entry>C or "common" time</entry>
+	    </row>
+	    <row><entry><symbol role="symbolfont">&brl456;&brl14;</symbol></entry>
+  	         <entry>Barred C or "cut" time</entry>
+	    </row>
+	    <row><entry><symbol role="symbolfont">&brl3456;&brl145;&brl256;</symbol></entry>
+  	         <entry>4/4</entry>
+	    </row>
+	  </tbody>
+	</tgroup>
+	</table>
+	<para>
+A time signature must be followed by a space, and the next note following it
+must have an octave mark.
+	</para>
+	<para>
+The key and time signatures are combined with or without one
+space between, according to the practice of the nation.
+<warning>This is not implemented yet, time and key signatures are combined without a space.</warning>
+	</para>
+      </sect1>
+    </chapter>
+    <chapter><title>Contrapuntal lines and chords within a staff</title>
+      <para>
+Unlike print music notation, braille music is an entirely linear format.
+Therefore certain conventions must be used to indicate contrapuntal lines
+and chords, situations where more than one note is played simultaneously
+within a single staff.
+      </para>
+      <sect1><title>In-accords</title>
+      <para>
+Independent contrapuntal lines within a single staff are indicated via
+whole-measure or part-measure "in-accords".
+      </para>
+      </sect1>
+      <sect1><title>Interval notation</title>
+      <para>
+Homophonic chordal sections are written using interval notation.
+      </para>
+      <table><title>Interval symbols</title>
+	<tgroup cols='2'>
+	  <thead><row><entry>Symbol</entry><entry>Interval</entry></row></thead>
+	  <tbody>
+	    <row><entry><symbol role="symbolfont">&brl34;</symbol></entry>
+  	         <entry>second</entry>
+	    </row>
+	    <row><entry><symbol role="symbolfont">&brl346;</symbol></entry>
+  	         <entry>third</entry>
+	    </row>
+	    <row><entry><symbol role="symbolfont">&brl3456;</symbol></entry>
+  	         <entry>fourth</entry>
+	    </row>
+	    <row><entry><symbol role="symbolfont">&brl35;</symbol></entry>
+  	         <entry>fifth</entry>
+	    </row>
+	    <row><entry><symbol role="symbolfont">&brl356;</symbol></entry>
+  	         <entry>sixth</entry>
+	    </row>
+	    <row><entry><symbol role="symbolfont">&brl25;</symbol></entry>
+  	         <entry>seventh</entry>
+	    </row>
+	    <row><entry><symbol role="symbolfont">&brl36;</symbol></entry>
+  	         <entry>octave</entry>
+	    </row>
+	  </tbody>
+	</tgroup>
+      </table>
+      </sect1>
+    </chapter>
+  </part>
+
+  <part><title>Obtaining MusicXML scores</title>
+    <partintro>
+      <para>
+&App; is not a full &omr; solution.  To be able to read sheet music, you will
+first need to obtain the music you want to read with &App; in MusicXML format.
+      </para>
+      <para>
+The following chapters are concerned with how and where you can obtain sheet
+music in MusicXML.
+      </para>
+    </partintro>
+
+    <chapter><title>What is MusicXML?</title>
+      <para>
+MusicXML is a &XML; based file format for storing musical notation.  It is
+being developed by <ulink url="http://www.recordare.com/">Recordare LLC</ulink>.
+      </para>
+    </chapter>
+    <chapter><title>How to create MusicXML scores?</title>
+      <para>
+MusicXML is now supported by almost all commercial applications
+dealing with musical scores in one way or another.
+There are basically two ways to obtain a score in MusicXML format.
+Either you already have it in some computerized form, then you need
+to investigate how to convert your data to MusicXML.  Many commercial
+notation editors offer a way to export to MusicXML these days.
+If you have the music on paper, you need some &omr; software
+to scan and recognize your music.
+      </para>
+      <para>
+A list of applications that allow to save or export to MusicXML
+format can be found <ulink url="http://www.musicxml.org/xml/software.html#NowWrites">here</ulink>.
+      </para>
+      <sect1><title>Using Sibelius to create MusicXML documents</title>
+      <sect2><title>Fingering</title>
+	<para>
+There are three types of text in Sibelius
+	<itemizedlist>
+	  <listitem>
+	    <para>
+Staff text: text that applies to a single staff, typically directions for a
+single instrument
+	    </para>
+	  </listitem>
+	  <listitem>
+	  <para>
+System text: text that applies to all staves in the score (though it may
+only be displayed above one or two of them), and which will appear in all
+parts (if there are any) -- typically tempo or rehearsal directions
+	  </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+Blank page text: text that can only be created on a blank page, typically
+performance directions or other front matter.
+	    </para>
+	  </listitem>
+	</itemizedlist>
+	</para>
+	<para>
+If you plan to export your score to MusicXML with <productname> Dolet for Sibelius</productname>
+so that you can import it in another music notation program or have Freedots
+transcribe your score, Then you not only have to make sure to use the right
+text type, but also the right font and style.
+	</para>
+	<para>
+You achieve this by using the word menus, that most Sibelius text edit dialogs
+provide.
+	</para>
+	<para>
+An example for fingering:
+Open "menu/create/text/other staff text/fingering". Unless you are very
+familiar with the text style and font to use, don't just type your fingering
+in the edit field, but select a fingering provided in the word menu. You open
+this word menu by right clicking with the mouse or by just pressing the
+application key.
+	</para>
+      </sect2>
+      </sect1>
+    </chapter>
+    <chapter><title>MusicXML on the Internet</title>
+      <para>
+Since MusicXML is increasingly being used as an interchange format between
+different music notation software, it is increasingly being used as the
+canonical format to distribute musical notation over the Internet.
+      </para>
+      <para>
+Therefore, there is a chance that the music you are looking for is already
+available on the Internet in MusicXML format.
+      </para>
+      <para>
+Below is a list of some Internet resources that offer MusicXML files
+for download.
+      </para>
+      <variablelist>
+	<varlistentry>
+	  <term><ulink url="http://www.hausmusik.ch/notenregal/">Hausmusik Notenregal</ulink></term>
+	  <listitem><para>A repository of scores in various formats, including MusicXML, from <quote>Verein zur Förderung der Hausmusik</quote> in Switzerland.</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term><ulink url="http://wikifonia.org/">Wikifonia.Org</ulink></term>
+	  <listitem><para>Wikifonia is a collection of Lead Sheets (lyrics, melody and chords) of pop songs.</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term><ulink url="http://www.pjb.com.au/mus/xml/">Peter J Billam's arrangements of JS Bach for recorder</ulink></term>
+	  <listitem><para><personname><firstname>Peter</firstname><othername>J</othername><surname>Billam</surname></personname> provides a few of his <ulink url="http://www.pjb.com.au/mus/">arrangements</ulink> for recorder in MusicXML format for free.</para></listitem>
+	</varlistentry>
+      </variablelist>
+    </chapter>
+  </part>
+  <part><title>Using &App;</title>
+    <partintro>
+      <para>
+Now that we have acquainted ourselves with &bmn; and know how to obtain
+MusicXML documents we can go on and examine in
+detail how &App; can be used to automatically transcribe scanned sheet music
+to &bmn;.
+      </para>
+    </partintro>
+    <chapter><title>Overview</title>
+      <para>
+The user interface of &App; closely resembles a typical editor application.
+At the top is a menu bar for convenient access to the most used actions.
+The main part of the application is a text edit window which contains
+the result of transcribing the currently opened MusicXML file to &bmn;.
+      </para>
+      <para>
+You can use the caret to navigate inside the resulting braille music
+document as in other editing applications.  The caret position is
+context sensitive.  For instance, if you move the caret the status
+area will automatically be updated with textual information about the braille
+symbol currently underneath the caret.
+      </para>
+      <para>
+&App; also offers the possibility to play back the score currently opened.
+During playback, the caret position will update synchronous to the music.
+Additionally, there is the possibility to play individual parts of a score,
+or just a single note.
+      </para>
+    </chapter>
+    <chapter><title>The Menu bar</title>
+      <para>This list briefly describes the actions available in the &App;
+        menu.</para>
+      <variablelist>
+	<varlistentry>
+	  <term><menuchoice>
+	    <shortcut>
+	      <keycombo><keycap>Ctrl</keycap><keycap>o</keycap></keycombo>
+	    </shortcut>
+	    <guimenu>File</guimenu>
+	    <guimenuitem>Open</guimenuitem>
+	  </menuchoice></term>
+	  <listitem><para><action>Open a MusicXML document.</action></para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term><menuchoice>
+	    <shortcut>
+	      <keycombo><keycap>Ctrl</keycap><keycap>p</keycap></keycombo>
+	    </shortcut>
+	    <guimenu>File</guimenu>
+	    <guimenuitem>Play score</guimenuitem>
+	  </menuchoice></term>
+	  <listitem><para><action>Start playback of the whole score.</action></para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term><menuchoice>
+	    <guimenu>File</guimenu>
+	    <guimenuitem>Save as MIDI</guimenuitem>
+	  </menuchoice></term>
+	  <listitem><para><action>Export the currently opened MusicXML to a standard MIDI file.</action></para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term><menuchoice>
+	    <guimenu>File</guimenu>
+	    <guimenuitem>Quit</guimenuitem>
+	  </menuchoice></term>
+	  <listitem><para><action>Exit &App;</action></para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term><menuchoice>
+	    <shortcut>
+	      <keycombo><keycap>Alt</keycap><keycap>l</keycap></keycombo>
+	    </shortcut>
+	    <guimenu>Library</guimenu>
+	  </menuchoice></term>
+	  <listitem><para>For your convenience, &App; ships with a few,
+freely distributable scores.  This menu allows you to choose one of the prepackaged scores for transcription and/or playback.</para></listitem>
+	</varlistentry>
+      </variablelist>
+    </chapter>
+  </part>
+  <appendix><title>Frequently Asked Questions</title>
+    <qandaset>
+      <qandadiv><title>General Information</title>
+        <qandaentry>
+	    <question id="q-windows"><para>Does &App; work on
+	      <productname class="trade"><indexterm zone="q-windows">
+	        <primary>Windows</primary></indexterm>Windows</productname>?</para></question>
+	    <answer><para>
+Yes.  You will need to install <application>Java 1.6</application>.
+For proper accessibility support you will also need the
+<productname>Java-Access-Bridge</productname> installed.
+	    </para></answer>
+	  </qandaentry>
+	  <qandaentry>
+	    <question id="q-linux-brltty"><para>Why can't I read the default output of &App;
+	      on <productname class="trade"><indexterm zone="q-linux-brltty">
+	           <primary>Linux</primary></indexterm>Linux</productname> with
+	      <application><indexterm zone="q-linux-brltty"><primary>BRLTTY</primary></indexterm>BRLTTY</application>?</para></question>
+	    <answer><para>&App; uses Unicode by default to output
+	      braille and text such that sighted and blind users can read the
+	      output without major confusion.</para>
+	    <para>However, the Unicode braille row is only supported by the
+	      braille display driver BRLTTY on Linux since release 3.10.
+	      You will also need the braille fonts provided
+	      on <ulink url="http://brl.thefreecats.org/"/>.</para></answer>
+	  </qandaentry>
+	</qandadiv>
+      </qandaset>
+  </appendix>
+  <appendix><title>Traditional <acronym>UNIX</acronym> manual pages</title>
+    <refentry id="freedots">
+      <refmeta>
+	<refentrytitle>&app;</refentrytitle> <manvolnum>1</manvolnum>
+	<refmiscinfo class="version">0.6</refmiscinfo>
+      </refmeta>
+
+      <refnamediv>
+	<refname>&app;</refname>
+	<refpurpose>convert MusicXML to &bmn;</refpurpose>
+      </refnamediv>
+
+      <refsynopsisdiv>
+	<cmdsynopsis>
+	  <command>&app;</command>
+	  <arg><option>-nw</option></arg>
+	  <group>
+	    <arg><option>-p</option></arg>
+	    <arg><option>--play</option></arg>
+	  </group>
+	  <group>
+	    <arg><option>-w</option> <replaceable>COLUMNS</replaceable></arg>
+	    <arg><option>--width</option> <replaceable>COLUMNS</replaceable></arg>
+	  </group>
+          <group>
+            <arg><option>-h</option> <replaceable>LINES</replaceable></arg>
+            <arg><option>--height</option> <replaceable>LINES</replaceable></arg>
+          </group>
+          <arg><option>-mps</option> <replaceable>NUMBER</replaceable></arg>
+	  <arg choice="req"><replaceable>MusicXML file</replaceable></arg>
+	</cmdsynopsis>
+      </refsynopsisdiv>
+
+      <refsect1><title>Description</title>
+	<para><application>&App;</application> converts MusicXML files
+	  to &bmn;.
+	</para>
+      </refsect1>
+      <refsect1><title>Options</title>
+        <para><application>&App;</application> always expects a
+	  MusicXML input file on the command line.
+	</para>
+	<variablelist>
+	  <varlistentry>
+	    <term>
+	      <option>-nw</option>
+	    </term>
+	    <listitem><para>
+	      Do not start the graphical user interface (batch processing).</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><option>-p</option></term>
+	    <term><option>--play</option></term>
+	    <listitem>
+	      <para>Play music in addition to converting it to braille.</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry id="width">
+	    <term><option>-w</option></term>
+	    <term><option>--width</option></term>
+	    <listitem>
+	      <para>
+	        <indexterm><primary>width</primary><secondary>COLUMNS</secondary></indexterm>
+	        Set the desired amount of braille cells used horizontally.</para>
+	      <para>The default is 32.</para>
+	    </listitem>
+	  </varlistentry>
+	</variablelist>
+      </refsect1>
+    </refentry>
+  </appendix>
+
+  <index/>
+</book>
+
