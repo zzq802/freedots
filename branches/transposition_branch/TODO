@@ -1,0 +1,441 @@
+FREEDOTS -*- mode: org; fill-column: 78 -*-
+
+* General
+** TODO Refactor code
+
+Alot of the code currently in use has been written ad-hoc, without a lot
+of planning ahead.  Many of the items below will first need a bit
+of refactoring of the current codebase.  Some ideas:
+
+*** TODO musicxml.Measure?
+
+I have been going back and forth between a relatively flat event-list
+representation (what we currently have in MusicList) and a representation
+where measures are container objects, like they are in musicxml.
+I am still not sure what is better, but it looks like the measure abstraction
+is useful for a number of reasons.
+
+Create a musicxml.Measure class which has start/stopBar accessors.
+Also, maybe create staff objects at construction time inside of the measure.
+
+This will need major refactoring of all the client code, namely playback
+and transcription.  It would also mean that all classes derived
+from VerticalEvent can go away.
+
+** TODO Review and upgrade scores/*.xml
+
+The example scores ("Library") are generated with different methods.  Some have
+been scanned with PhotoScore (MusicXML 1.0/1.1) from Lilypond generated
+printouts, others were mostly written by hand in Emacs with a few Lisp macros,
+and one score has been written in Sibelius by a very kind contributor.
+Many scores do not support beam/stem/accidental elements.  FreeDots doesn't
+really care about those, but other programs might.  Some scores even contain
+minor remaining errors.  They all should be imported into a pro notation editor
+like Sibelius or Finale, and checked for validity that way.  Where apropriate,
+beaming and stem directions should be added and the resoluting scores should
+be normalized so that a diff shows the actual changes done by the application
+in use.  Ideally, all scores should be upgraded to MusicXML 2.0.  While
+FreeDots is deliberately designed to be very liberal with what it accepts
+(braille music doesn't care about stem direction, so we simply totally ignore
+it), other more visually oriented notation programs might have problems with
+scores in such a "raw" encoding.
+
+UPDATE: This turns out to be harder then initially thought since autobeaming
+and stem direction calculation apparently is not as sophisticated
+as hoped.
+
+** TODO Portable exception reporting to a central place
+
+For better quality of MusicXML parsing, a fascility should be developed
+which sends an exception whenever it happens via email + the
+XML in question attached.  This should only trigger after
+the user confirmed this to happen.  This fascility should also
+only be enabled in download versions so that developers do not
+accidentally generate such mails.
+
+* MusicXML
+
+** TODO Properly handle spanners
+*** TODO Fix slur parsing
+
+Currently, slur handling is somewhat broken and needs
+an overhaul.  The aim is obviously to parse existing complicated
+MusicXML files with things like cross-staff-slurs and cross-voice-slurs
+such that the actual musical intent is preserved.
+
+** TODO Transposition
+
+*** TODO Handle the transpose element
+
+MusicXML has a <transpose> element which is used in various
+situations around transposing instruments.  This element is currently
+unsupported, should be imlemented (see scores/bwv999.xml).
+
+*** TODO Allow on-the-fly transposition of a score
+
+The user should be able to transpose a given score to a different
+key.  This will be a method of the Score class.
+The UI would offer the ability to trigger that method, and retranscribe
+the resulting score to braille.  This will be very useful for a lot of
+real-life music situations.  For instance, your teacher wants you to
+play a certain piece in F major, but you could only find an arrangement in
+D major.  With this feature, you'd just instruct FreeDots to tranpose
+the score up by 3 half-steps.
+
+Hint: libmusicxml (C++) used to implement transposition algorithms.
+We can learn from reading that.
+
+** TODO Redo voice handling to support "forks and joins" at arbitrary positions
+
+One of the main reasons why the part-measure in-accord alogirthm is
+so incomplete and potentially buggy is that MusicList.getVoice() is
+apparently insufficient for properly querying changes in the
+structure of the music.  We want to easily see if a voice
+comes in (possibly in the middle of a measure).  MusicList.getVoice()
+currently presumes the whole sequence processed has the same amount
+of voices.  While the data structure is robust enough to work
+for MIDI playback, we'd like to be able to do more intelligent
+querying so that the part-measure in-accord algorithm can be
+rewritten.  Maybe look into the MusicXML2Braille paper by Goto et al,
+they seem to have worked out a low-level structure for storing
+parallel voices already.
+
+** TODO Note.Notations.Technical.getPluck()
+
+** TODO Note.Notations.Technical.getString()
+
+* Testsuite
+
+Write more tests.
+
+* Transcription
+Braille transcription is the core functionality of FreeDots, and
+also the most complicated to implement.  In a sense, what is there already is
+mostly still a prototype.  Nothing is set in stone yet.
+
+Some of the changes below might also involve changing the freedots.musicxml
+package to fascilitate easier information retrieval.
+
+** TODO Key and clef changes
+
+These are also currently not output.  They are somewhat related to Directions
+since they belong to a staff, but not to a particular voice.
+
+*** Clef change
+
+Clef changes are basically irrelevant to the braille music reader.
+However, for collaboration and communication with sighted music readers,
+it can be very helpful to know where the clef changes.
+
+*** TODO Key change
+
+Key changes usually occur at the beginning of a measure.  Can they also occur
+in the middle?  A key change is very important, and needs to be printed for
+the music to make sense.
+
+** TODO Repetitions
+
+The simile sign (⠶) is useful for indicating repetitions that
+are usually not marked up specially in visual notation.
+This, in combination with [[*Doubling]] can be thought of as a compression
+method.
+*** TODO Do not use repeat sign if no space is saved
+
+Currently, if a measure only consists of a single cell note and that
+measure is repeated, the simile sign is used.  This unnecessarily makes
+it harder to read the melody.  The simile sign should probably
+have a configurable treshold, maybe defaulting to at least needing
+to save 2 (or 1?) cells.  All the repetition detection variants below
+need to take this into account to make resulting scores more readable.
+
+*** TODO repetition detection needs to ignore certain objects
+
+If measure1 contains a direction (or similar) and measure 2 does not
+but both contain the same notes, repetition signs should be used.
+Similarily, if both measures start with a different dynamics indicator,
+only that needs to be printed and the repetition sign can be used
+to indicate that the notes are the same.
+
+This rule also applies to repetition detection in partial or full
+parallel voices described below.
+
+*** STARTED Repetition of whole measures
+
+This is implemented but needs extra work.  Basically, the current
+implementation is just a variant of equals() which ignores the
+note offset.  Another method is defined on the primary
+MusicList container to compare two containers for note equality.
+This is just a one-shot prototype which needs to be rethought to
+be more flexible.
+
+*** TODO Repetition of voices
+
+Sometimes (see bwv999) a certain voice repeats itself from
+measure to measure.  The simile sign can be used here as well.
+
+This used to work in the FreeDots python prototype, but
+given the complexity (and crazyness) of the current transcription
+classes it doesn't work anymore in the Java version.
+This should be relatively trivial to do though.
+
+*** TODO Repetition of beats
+
+If a beat inside a voice is repeated the simile sign can be used as well.
+This occurs frequently, notably in the moonshine sonata in combination
+with tripplets.
+
+The example given above becomes
+
+⠆⠆⠸⠓⠐⠙⠋⠸⠓⠐⠙⠋⠶ ⠶
+
+Note that first, simile is used to indicate beat repetition, and then,
+simile is used to indicate the repetition of the previous measure, resulting
+in 8 identical tripplets being played over the time of two measures
+in 2/2 time.
+
+Note that simile could also be used like this:
+⠼⠃⠆ ⠆⠆⠸⠓⠐⠙⠋⠶⠶⠶
+
+However, it might be desireable to have this behaviour configurable,
+i.e., if repetition detection should be limited to beats only,
+or if it should also be done with smaller subgroups if the resulting
+braille is shorter, should be a boolean option for the user.
+
+This said, the repetition detection algorithm needs to divide
+a sequence of notes (measure or partial voice) up into its beats, if that
+works see if there are identical connected groups.  As above, this technique
+needs to be limited according to its savings, so in 4/4 time ⠹⠹⠹⠹ shouldn't become
+⠹⠶⠶⠶ which just obscurs things but doesn't save any cells.
+
+** TODO Doubling
+
+Doubling is a very fundamental technique in braille music notation.
+Basically, if *something* other than a note repeats itself more than three
+times, it can be written twice in the first occurance, ommited for the rest
+upto the last occurance, where it is reinstatate a single time to indicate
+the end of the passage.
+
+While this sounds simple and is easy to read, designing a data structure
+to detect it seems not so easy since this rule is very generic.
+
+*** TODO Doubling intervals
+
+Doubling can also occur with intervals.  The left hand of the
+first four measures of LV Beethovens Moonshine sonata reads:
+
+⠼⠙⠩⠼⠃⠆ ⠸⠜⠽⠤ ⠾⠤ ⠎⠤⠟⠤ ⠗⠤⠗⠤
+
+which could be written as
+
+⠼⠙⠩⠼⠃⠆ ⠸⠜⠽⠤⠤ ⠾ ⠎⠟ ⠗⠗⠤
+
+As a rule, if more then three chords are played in a sequence and
+one (or more) of its intervals reoccurs within the whole sequence,
+it should be doulbed in the first chord and reprinted in the
+last chord.
+
+*** TODO Doubling Tuplets
+
+Similarily but this time as a prefix, tripplet (and alike)
+signs (⠆) can be doubled if a series of tripllets follow.
+
+Example:
+
+⠆⠸⠓⠐⠙⠋⠆⠸⠓⠐⠙⠋⠆⠸⠓⠐⠙⠋⠆⠸⠓⠐⠙⠋
+
+vs
+
+⠆⠆⠸⠓⠐⠙⠋⠸⠓⠐⠙⠋⠸⠓⠐⠙⠋⠆⠸⠓⠐⠙⠋
+
+(note: tradeoffs should eventually be considered as well.
+The example is contrived since the passage actually continues
+on for a few measures like that, so doubling is definitely desireable,
+however, if we look at the example as it is, the second version is just
+one cell shorter while the first version is easier to read.
+Seen from that perspective, doubling should probably be scored on the basis
+of how many cells it saves.  A user configurable value with a default
+of 2 seems sensible at first thought.)
+
+** TODO Lead sheets (lyrics and chord symbols)
+
+MusicXML supports parts with lyric text.  A very good
+repository for such files is at http://www.wikifonia.org/
+
+Currently only section by section format prints lyrics *and* chord symbols.
+Bar over Bar format needs additional work to print chord symbols,
+and allow for fancy alignment.
+
+*** TODO Implement bindings for liblouis for contracting lyrics
+
+Lyrics could be contracted with the contracted braille
+of choice of the user.  Therefore, we'd like to have bindings
+to liblouis, ideally on Linux *and* Windows.
+
+** TODO Note groupings
+
+Note grouping is basically beaming for braille music.
+For the detailed rules, see the braille music manual.
+
+The complicated issue about note grouping is that the use of the music hyphen
+disallows note groupings.  So once we have the first braille
+representation of a measure to check if it fits onto the current line,
+we might figure out that the music hyphen needs to be used if it does.
+If we instruct the measure to hyphenate at a certain position,
+the measure needs to undo note groupings.
+
+** TODO in-accord and partial measures
+
+If notes in a measure run in parallel it is the choice of the
+transcriber what to do, options are:
+ * use intervals: This is concise but might make it less obvious how
+   several voices run individually.  In a 3 voice measure (treble clef) you'd
+   always need to read the top note and both intervals to know what the
+   bottom note is.
+ * use in-accord separators (full-measure and part-measure): This can make
+   several voices pretty clear, but usually results in more cells being used.
+
+Considerations: It really depends on the music if intervals
+or in-accord separators should be used.  It might be a good idea
+to have a interval-cancel feature which would allow the user
+to select a chord and request it not being written with interval notation.
+
+Additionally, the use of part-measure in-accord can further
+complicate things.  There is almost always the choice of using
+only full-measure in-accord, however, what is more readable
+is really hard to tell programmatically (at least I think so for now).
+Also, there seem to be cases where part-measure in-accord is
+necessary to convey what happens (full-measure in accord wouldn't work, see
+below).
+
+This said, MusicXML has also several ways to convey identical
+structure.  Either <chord/> is used to combine notes (this
+is really just syntactic sugar for manipulating the tick) or <backup> is used
+to write the notes in several sweeps from left to right.  However, visually,
+there is no difference, so ideally, FreeDots would not care how the original
+MusicXML is specified.  Chords should be detected as such also if <chord/>
+is not used but notes appears to be parallel.  It should
+be a setting at transcription time that tells the system if
+intervals are allowed and if full-measure in-accord only, or in-accord in
+general is supposed to be used.
+
+We need to find an intermediate representation that allows for
+easy querying of structure such that parallel notes and partial
+voices can be handled.  In 4/4 time, imagine a measure
+that starts with a quarter c, but continues with a dotted half
+b and d.  This is part-measure in accord, and would be written
+as qc>hb,hd (> terminates a partial measure and , separates partial-measure
+in-accord).
+
+To top if off, it would be desireable to design the transcription
+phase such that all possible transcriptions of a measure (given
+the restrictions specified by the user) are generated and the
+best (shortest) version is used.  However, this could lead
+to strange transcriptions if the method varies from measure to measure,
+so step up in the hierarchy and make the decision based
+on scoring all measures.  But this will not work with
+music that changes a lot, which is probably the default, so...
+
+*** Examples
+BWV988 Aria m1 left hand:
+
+⠸⠜⠸⠗⠄⠇⠣⠜⠧⠨⠅⠸⠞⠐⠂⠧⠐⠱ or
+⠸⠜⠸⠗⠄⠇⠣⠜⠧⠸⠞⠣⠜⠧⠧⠐⠱ or
+
+BWV 1004 Chaconne m1:
+
+⠧⠨⠅⠐⠪⠄⠊⠐⠂⠨⠟⠬ or
+⠧⠨⠅⠐⠪⠄⠊⠐⠂⠨⠟⠐⠂⠨⠕
+
+* Playback
+
+** TODO Correctly play tied notes
+
+Currently, tied notes are played as their individual notes.  Their
+actualy duration should be summed up and only one pair of MIDI
+events should be generated so that no additional attack(s) are heard.
+
+** TODO Play grace notes
+
+For simplicity, grace notes are currently just not played at all.
+This should be fixed, grace notes should be played like any
+other note.  A grace note steals time from adjacent notes.  Also, investigate
+cue notes.
+
+** TODO Play all supported articulations and ornaments
+
+As an example, the turn ornament is executed already.
+Many more things need doing, like proper dynamics, articulation
+(staccato etc) and mordent etc.
+
+* User interface
+** TODO Transcription preferences
+
+There should be a dialog for configuring the preferences related
+to transcription.  Currently that means all Options that can
+be set from the command-line.  For instance, there is currently no way
+to change the page width and height from within the GUI.
+
+Also, as we implement the various todo items in this file,
+more and more preferences should be added.
+
+** TODO Editing of fingering
+
+*** TODO Fingering string instruments
+
+For string instruments, the UI would need to ask for left and right hand
+fingering.  Left hand fingering has the unfretted string as a special
+exception.  There is probably some work to do
+in the freedots.musicxml package to support this properly.
+Currently the implementation just stupidly assumes
+fingering is just a list of finger numbers, i.e. it only
+supports keyboard fingering.
+
+** TODO Editing of articulations
+
+A note can have a set of articulation marks attached to it.
+Editing of those is a non-structural change, i.e. it
+does work with the current musicxml handling.
+
+Write a dialog which allows the user to change the articulation marks attached
+to a certain note.
+
+** TODO Goto
+
+We need some global bindings to jump to certain places in a score.
+Good candidates are measure + part/staff or page/line/column.
+
+** TODO Create log view widget
+
+The class freedots.logging.Logger currently implements a simple miltiplex
+of log messages to the console and to a queue.
+The GUI needs some usability work.
+
+** TODO Look into functionality for blind users who do not use braille
+
+Currently out of scope for this project, but still something we should keep
+open for.  I've received a few emails from potential users who didn't or
+could not use braille.  They would have prefered a speech based
+interface for reading music.
+
+
+* MS Windows Installer
+** TODO Check error during installation
+
+Some users have reported some kind of error (no details) during
+installation.
+
+** TODO Provide an option to install Java Access Bridge
+
+Currently, on the JRE is installed if none exists.  Ideally, the user
+should be prompted if they want to install java access bridge
+as well, since most screen readers on Windows require that.
+
+* Port to Java Mobile Devices API (for accessible cellphones)
+
+It would be neat if a blind user could use FreeDots interactively on their
+cellphone.  Nokia phone screen readers like Talks can drive a braille
+display connected via bluetooth.  We'd need to write a UI based
+on the java standards for mobile devices and create a special
+.jar for that platform.  The MIDI playback code also needs some special
+porting.
+
